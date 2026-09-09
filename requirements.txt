@@ -1,0 +1,15 @@
+# AILURO — Distress Scoring API
+# Core web framework
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# Pydantic (FastAPI depends on this)
+pydantic>=2.0.0
+
+# RAG / ML (optional — the engine gracefully falls back without these)
+scikit-learn>=1.4.0       # TF-IDF vectorizer for the RAG retriever
+transformers>=4.40.0      # Gemma / HuggingFace pipeline (optional)
+torch>=2.2.0              # required by transformers (optional)
+
+# Utilities
+python-dotenv>=1.0.0      # load .env files for DISTRESS_LLM_MODEL etc.

@@ -1,0 +1,33 @@
+﻿# Python
+__pycache__/
+*.pyc
+.venv/
+.venv-train/
+venv/
+*.egg-info/
+
+# Environment / secrets
+.env
+*.env
+*_token*
+*_key*
+
+# Real or sensitive data - never commit actual check-in records.
+# Explicit exceptions below are synthetic/example data only.
+*.jsonl
+!training/sample_dataset.jsonl
+!training/dataset.jsonl
+data/
+
+# Runtime-generated alert logs - not source, not synthetic examples
+engine/alerts_log.jsonl
+
+# Model weights / adapters (too large for git - use Git LFS or a release)
+*.safetensors
+*.bin
+gemma-distress-lora*/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/

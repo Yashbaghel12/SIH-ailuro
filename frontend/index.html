@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Check-in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --cream: #FFF8F3;
+            --pink: #FFD6E8;
+            --lavender: #E3D9FF;
+            --mint: #D4F5E9;
+            --plum: #4A3B52;
+            --coral: #FF9EB5;
+            --coral-deep: #F97DA0;
+            --peach: #FFE3D1;
+            --shadow: rgba(74, 59, 82, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Nunito', sans-serif;
+            color: var(--plum);
+            background: var(--cream);
+            background-image:
+                radial-gradient(circle at 12% 18%, var(--pink) 0%, transparent 32%),
+                radial-gradient(circle at 88% 12%, var(--lavender) 0%, transparent 30%),
+                radial-gradient(circle at 90% 85%, var(--mint) 0%, transparent 34%),
+                radial-gradient(circle at 8% 88%, var(--peach) 0%, transparent 30%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 440px;
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px var(--shadow);
+            padding: 36px 32px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 160px;
+            height: 160px;
+            background: var(--pink);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        h1 {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 700;
+            font-size: 26px;
+            line-height: 1.25;
+            margin: 0 0 4px;
+            text-align: center;
+            position: relative;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #8A7A91;
+            margin: 0 0 20px;
+            position: relative;
+        }
+
+        .mascot-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .mascot-wrap svg {
+            width: 132px;
+            height: 132px;
+            transition: transform 0.25s ease;
+        }
+
+        .mood-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        .mood-btn {
+            flex: 1;
+            aspect-ratio: 1;
+            border: 2px solid transparent;
+            border-radius: 18px;
+            background: var(--cream);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+            padding: 0;
+        }
+
+        .mood-btn svg {
+            width: 60%;
+            height: 60%;
+        }
+
+        .mood-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .mood-btn.selected {
+            background: var(--peach);
+            border-color: var(--coral);
+            transform: translateY(-3px);
+        }
+
+        label.field-label {
+            font-weight: 800;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 96px;
+            border-radius: 18px;
+            border: 2px solid var(--peach);
+            padding: 14px 16px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: var(--plum);
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.15s ease;
+            background: var(--cream);
+        }
+
+        textarea:focus {
+            border-color: var(--coral);
+        }
+
+        textarea::placeholder {
+            color: #B7A6BD;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 16px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .switch {
+            position: relative;
+            width: 44px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-toggle {
+            position: absolute;
+            inset: 0;
+            background: #E7DCE9;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .slider-toggle::before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        input:checked+.slider-toggle {
+            background: var(--coral);
+        }
+
+        input:checked+.slider-toggle::before {
+            transform: translateX(18px);
+        }
+
+        button.submit {
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            padding: 16px;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            background: linear-gradient(135deg, var(--coral), var(--coral-deep));
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 10px 24px rgba(249, 125, 160, 0.35);
+            transition: transform 0.12s ease;
+        }
+
+        button.submit:active {
+            transform: scale(0.98);
+        }
+
+        button.submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 20px;
+            border-radius: 20px;
+            padding: 18px 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.low {
+            background: var(--mint);
+        }
+
+        .result.medium {
+            background: var(--peach);
+        }
+
+        .result.high {
+            background: var(--pink);
+        }
+
+        .result h3 {
+            font-family: 'Baloo 2', sans-serif;
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+
+        .result p {
+            margin: 0 0 8px;
+        }
+
+        .result p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>How are you feeling today?</h1>
+        <p class="subtitle">A quick, private check-in — takes less than a minute.</p>
+
+        <div class="mascot-wrap">
+            <svg id="mascot" viewBox="0 0 200 200">
+                <ellipse cx="100" cy="180" rx="55" ry="10" fill="#4A3B52" opacity="0.06" />
+                <circle cx="100" cy="100" r="72" fill="#FFE3D1" />
+                <circle cx="100" cy="100" r="72" fill="none" stroke="#4A3B52" stroke-width="2" opacity="0.08" />
+                <circle cx="70" cy="95" r="7" fill="#4A3B52" />
+                <circle cx="130" cy="95" r="7" fill="#4A3B52" />
+                <circle cx="55" cy="108" r="9" fill="#FF9EB5" opacity="0.7" />
+                <circle cx="145" cy="108" r="9" fill="#FF9EB5" opacity="0.7" />
+                <path id="mascot-mouth" d="M 78 125 Q 100 145 122 125" fill="none" stroke="#4A3B52" stroke-width="4"
+                    stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <div class="mood-row" id="moodRow">
+            <!-- mood buttons injected by JS -->
+        </div>
+
+        <label class="field-label" for="text">Want to share more? (optional)</label>
+        <textarea id="text" placeholder="Write as much or as little as you'd like..."></textarea>
+
+        <div class="toggle-row">
+            <span>Have you felt threatened recently?</span>
+            <label class="switch">
+                <input type="checkbox" id="threat">
+                <span class="slider-toggle"></span>
+            </label>
+        </div>
+
+        <button class="submit" id="submitBtn">Send check-in</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:8000/checkin";
+
+        const moods = [
+            { score: 1, mouth: "M 78 132 Q 100 112 122 132", miniMouth: "M 22 40 Q 30 32 38 40" },
+            { score: 2, mouth: "M 78 128 Q 100 122 122 128", miniMouth: "M 22 37 Q 30 34 38 37" },
+            { score: 3, mouth: "M 80 128 L 120 128", miniMouth: "M 23 36 L 37 36" },
+            { score: 4, mouth: "M 78 122 Q 100 136 122 122", miniMouth: "M 22 33 Q 30 40 38 33" },
+            { score: 5, mouth: "M 76 118 Q 100 148 124 118", miniMouth: "M 21 31 Q 30 44 39 31" },
+        ];
+
+        let selectedMood = 3;
+
+        function faceSVG(miniMouthPath) {
+            return `<svg viewBox="0 0 60 60">
+    <circle cx="30" cy="30" r="26" fill="#FFF8F3"/>
+    <circle cx="22" cy="26" r="3" fill="#4A3B52"/>
+    <circle cx="38" cy="26" r="3" fill="#4A3B52"/>
+    <path d="${miniMouthPath}" fill="none" stroke="#4A3B52" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>`;
+        }
+
+        const moodRow = document.getElementById("moodRow");
+        moods.forEach(m => {
+            const btn = document.createElement("button");
+            btn.className = "mood-btn" + (m.score === selectedMood ? " selected" : "");
+            btn.innerHTML = faceSVG(m.miniMouth);
+            btn.addEventListener("click", () => {
+                selectedMood = m.score;
+                document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+                document.getElementById("mascot-mouth").setAttribute("d", m.mouth);
+            });
+            moodRow.appendChild(btn);
+        });
+
+        document.getElementById("submitBtn").addEventListener("click", async () => {
+            const btn = document.getElementById("submitBtn");
+            const resultBox = document.getElementById("result");
+            const text = document.getElementById("text").value;
+            const threat = document.getElementById("threat").checked;
+
+            btn.disabled = true;
+            btn.textContent = "Sending...";
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        mood_score: selectedMood,
+                        text: text,
+                        days_since_complaint: 0,
+                        missed_checkins: 0,
+                        threat_reported: threat,
+                    }),
+                });
+                const data = await res.json();
+
+                const messages = {
+                    low: "Thanks for sharing — glad things feel steady right now.",
+                    medium: "Thanks for sharing. A support coordinator will check in with you soon.",
+                    high: "Thank you for telling us. Your support coordinator has been notified and will reach out shortly.",
+                };
+
+                let extraLine = "";
+                if (data.risk_level === "high") {
+                    extraLine = data.authority_notified
+                        ? "<p style='margin-top:8px;font-size:12px;color:#8A7A91;'>✓ Case worker notified</p>"
+                        : "";
+                }
+
+                resultBox.className = "result show " + data.risk_level;
+                resultBox.innerHTML = `
+      <h3>Check-in received</h3>
+      <p>${messages[data.risk_level] || "Thanks for sharing."}</p>
+      ${extraLine}
+    `;
+            } catch (err) {
+                resultBox.className = "result show medium";
+                resultBox.innerHTML = `<h3>Couldn't send check-in</h3><p>Please check that the server is running and try again.</p>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Send check-in";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

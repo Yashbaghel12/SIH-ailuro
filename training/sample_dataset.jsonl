@@ -1,0 +1,5 @@
+{"text": "feeling okay today, things are calm", "severity": 10, "indicators": []}
+{"text": "I'm scared, I feel followed and can't sleep", "severity": 85, "indicators": ["threat", "sleep disturbance"]}
+{"text": "the trial keeps getting delayed, I feel hopeless", "severity": 65, "indicators": ["case pendency", "hopelessness"]}
+{"text": "neighbors have stopped talking to me since the complaint", "severity": 45, "indicators": ["social isolation"]}
+{"text": "they threatened my family again yesterday", "severity": 95, "indicators": ["direct threat"]}
