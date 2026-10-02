@@ -1,0 +1,3 @@
+# Used when the Netlify base directory is set to "frontend" in the UI.
+[build]
+  publish = "."
